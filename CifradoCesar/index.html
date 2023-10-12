@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cifrado Cesar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 20px 0 5px 0;
+            font-weight: bold;
+            font-size: 14px; /* Reducir el tamaño de fuente de la etiqueta */
+        }
+
+        input[type="number"] {
+            width: 60px; /* Reducir el ancho del campo de entrada número */
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px; /* Reducir el tamaño de fuente del campo de entrada número */
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        span#result {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cifrado Cesar</h1>
+    <label for="message">Mensaje:</label>
+    <input type="text" id="message">
+    <label for="shift">Desplazamiento:</label>
+    <input type="number" id="shift"><br><br>
+    <button onclick="cipher('encrypt')">Cifrar</button>
+    <button onclick="cipher('decrypt')">Descifrar</button>
+    <p>Resultado: <span id="result"></span></p>
+
+    <script>
+        function cesarCipher(input, shift) {
+            shift = shift % 26;
+            let result = "";
+            for (let i = 0; i < input.length; i++) {
+                let char = input[i];
+                if (char.match(/[a-z]/i)) {
+                    const code = input.charCodeAt(i);
+                    let offset = 65; // Para letras mayúsculas
+                    if (char.match(/[a-z]/)) {
+                        offset = 97; // Para letras minúsculas
+                    }
+                    const shiftedCode = (code - offset + shift + 26) % 26;
+                    const shiftedChar = String.fromCharCode(shiftedCode + offset);
+                    result += shiftedChar;
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+
+        function cipher(action) {
+            const message = document.getElementById("message").value;
+            const shift = parseInt(document.getElementById("shift").value);
+            let resultMessage;
+            
+            if (action === 'encrypt') {
+                resultMessage = cesarCipher(message, shift);
+            } else if (action === 'decrypt') {
+                resultMessage = cesarCipher(message, -shift); // Use un desplazamiento negativo para descifrar
+            }
+            
+            document.getElementById("result").textContent = resultMessage;
+        }
+    </script>
+</body>
+</html>
